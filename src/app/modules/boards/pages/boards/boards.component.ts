@@ -1,13 +1,24 @@
-import { Component } from '@angular/core';
-import { faBox, faWaveSquare, faClock, faAngleUp, faAngleDown, faHeart, faBorderAll, faUsers, faGear } from '@fortawesome/free-solid-svg-icons';
+import { Component, OnInit } from '@angular/core';
+import {
+  faBox,
+  faWaveSquare,
+  faClock,
+  faAngleUp,
+  faAngleDown,
+  faHeart,
+  faBorderAll,
+  faUsers,
+  faGear,
+} from '@fortawesome/free-solid-svg-icons';
 import { faTrello } from '@fortawesome/free-brands-svg-icons';
+import { MeService } from '@services/me.service';
+import { Boards } from '@models/boards.model';
 
 @Component({
   selector: 'app-boards',
-  templateUrl: './boards.component.html'
+  templateUrl: './boards.component.html',
 })
-export class BoardsComponent {
-
+export class BoardsComponent implements OnInit {
   faTrello = faTrello;
   faBox = faBox;
   faWaveSquare = faWaveSquare;
@@ -19,6 +30,19 @@ export class BoardsComponent {
   faUsers = faUsers;
   faGear = faGear;
 
-  constructor() { }
+  boards: Boards[] = [];
 
+  constructor(private meSrv: MeService) {}
+
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    this.getMeBoards();
+  }
+
+  getMeBoards() {
+    this.meSrv.getMeBoards().subscribe((boards) => {
+      this.boards = boards;
+    });
+  }
 }
