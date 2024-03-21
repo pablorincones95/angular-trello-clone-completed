@@ -1,0 +1,128 @@
+<form [formGroup]="form" novalidate class="space-y-4" (ngSubmit)="onSubmit()">
+  <div>
+    <div class="flex flex-wrap">
+      <div class="flex items-center mb-4 mr-3">
+        <input
+          id="sky-radio"
+          type="radio"
+          value="sky"
+          name="backgroundColor"
+          formControlName="backgroundColor"
+          class="w-4 h-4 text-sky-600 bg-gray-100 border-gray-300 focus:ring-sky-500 dark:focus:ring-sky-600"
+        />
+        <label for="sky-radio" class="ml-1 text-sm font-medium text-gray-900">
+          Sky
+        </label>
+      </div>
+      <div class="flex items-center mb-4 mr-3">
+        <input
+          id="yellow-radio"
+          type="radio"
+          value="yellow"
+          name="backgroundColor"
+          formControlName="backgroundColor"
+          class="w-4 h-4 text-yellow-600 bg-gray-100 border-gray-300 focus:ring-yellow-500 dark:focus:ring-yellow-600"
+        />
+        <label
+          for="yellow-radio"
+          class="ml-1 text-sm font-medium text-gray-900"
+        >
+          yellow
+        </label>
+      </div>
+      <div class="flex items-center mb-4 mr-3">
+        <input
+          id="red-radio"
+          type="radio"
+          value="red"
+          name="backgroundColor"
+          formControlName="backgroundColor"
+          class="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500 dark:focus:ring-red-600"
+        />
+        <label for="red-radio" class="ml-1 text-sm font-medium text-gray-900">
+          Red
+        </label>
+      </div>
+      <div class="flex items-center mb-4 mr-3">
+        <input
+          id="violet-radio"
+          type="radio"
+          value="violet"
+          name="backgroundColor"
+          formControlName="backgroundColor"
+          class="w-4 h-4 text-violet-600 bg-gray-100 border-gray-300 focus:ring-violet-500 dark:focus:ring-violet-600"
+        />
+        <label
+          for="violet-radio"
+          class="ml-1 text-sm font-medium text-gray-900"
+        >
+          Violet
+        </label>
+      </div>
+      <div class="flex items-center mb-4 mr-3">
+        <input
+          id="green-radio"
+          type="radio"
+          value="green"
+          name="backgroundColor"
+          formControlName="backgroundColor"
+          class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600"
+        />
+        <label for="green-radio" class="ml-1 text-sm font-medium text-gray-900">
+          Green
+        </label>
+      </div>
+      <div class="flex items-center mb-4 mr-3">
+        <input
+          id="gray-radio"
+          type="radio"
+          value="gray"
+          name="backgroundColor"
+          formControlName="backgroundColor"
+          class="w-4 h-4 text-gray-600 bg-gray-100 border-gray-300 focus:ring-gray-500 dark:focus:ring-gray-600"
+        />
+        <label for="gray-radio" class="ml-1 text-sm font-medium text-gray-900">
+          Gray
+        </label>
+      </div>
+    </div>
+    <ng-container
+      [ngTemplateOutlet]="renderVM"
+      [ngTemplateOutletContext]="{ field: 'backgroundColor' }"
+    ></ng-container>
+    <div class="relative">
+      <input
+        formControlName="title"
+        placeholder="Enter title"
+        type="text"
+        class="w-full rounded bg-gray-100 border-gray-300 border-2"
+      />
+    </div>
+    <ng-container
+      [ngTemplateOutlet]="renderVM"
+      [ngTemplateOutletContext]="{ field: 'title' }"
+    ></ng-container>
+  </div>
+
+  <div>
+    <ng-container *ngIf="!loading; else renderLoadingBtn">
+      <app-btn typeBtn="submit" color="success">
+        <span> Create</span>
+      </app-btn>
+    </ng-container>
+  </div>
+</form>
+
+<ng-template #renderLoadingBtn>
+  <app-btn typeBtn="submit" class="red">Procesando...</app-btn>
+</ng-template>
+
+<ng-template #renderVM let-field="field">
+  <div class="mt-1 mx-2 mb-3" *ngIf="submitted">
+    <ng-container *ngFor="let val of vm[field]">
+      <span class="text-red-600" *ngIf="f[field].hasError(val.type)">
+        {{ val.message | titlecase }}
+      </span>
+    </ng-container>
+  </div>
+</ng-template>
