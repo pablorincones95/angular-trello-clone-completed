@@ -5,6 +5,7 @@ import { checkToken } from '@interceptors/token.interceptor';
 import { Boards } from '@models/boards.model';
 import { Card } from '@models/card.model';
 import { Colors } from '@models/colors.model';
+import { List } from '@models/list.model';
 
 @Injectable({
   providedIn: 'root',
@@ -57,12 +58,12 @@ export class BoardsService {
     return 0;
   }
 
-  getPositionNewCard(cards: Card[]) {
-    if (cards.length === 0) {
+  getPositionNewItems(items: Card[] | List[]) {
+    if (items.length === 0) {
       return this.bufferSpace;
     }
-    const lastIndex = cards.length - 1;
-    const onBottomPosition = cards[lastIndex].position;
+    const lastIndex = items.length - 1;
+    const onBottomPosition = items[lastIndex].position;
     return onBottomPosition + this.bufferSpace;
   }
 }

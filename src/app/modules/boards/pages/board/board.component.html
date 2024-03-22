@@ -44,17 +44,33 @@
           <div *ngIf="list.showCardForm" class="w-full">
             <textarea [formControl]="inputCard" class="w-full"></textarea>
             <div class="flex space-x-2 justify-between">
-              <app-btn color="success" (click)="createCard(list)"
-                >Create</app-btn
-              >
+              <app-btn color="success" (click)="createCard(list)">
+                Create
+              </app-btn>
               <app-btn color="red" (click)="closeCardForm(list)">Close</app-btn>
             </div>
           </div>
         </div>
       </div>
-      <app-btn color="light" class="shrink-0" (click)="addColumn()"
-        >Add Column</app-btn
-      >
+      <div class="shrink-0">
+        <app-btn
+          *ngIf="!showListForm"
+          color="light"
+          class="shrink-0"
+          (click)="showListForm = !showListForm"
+        >
+          Add another list
+        </app-btn>
+        <div *ngIf="showListForm" class="w-full">
+          <textarea [formControl]="inputList" class="w-full"></textarea>
+          <div class="flex space-x-2 justify-between">
+            <app-btn color="success" (click)="addList()"> Create </app-btn>
+            <app-btn color="red" (click)="showListForm = !showListForm"
+              >Close</app-btn
+            >
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

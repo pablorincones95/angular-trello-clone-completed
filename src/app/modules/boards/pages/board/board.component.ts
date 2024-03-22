@@ -13,6 +13,7 @@ import { Card } from '@models/card.model';
 import { CardService } from '@services/card.service';
 import { List } from '@models/list.model';
 import { FormControl, Validators } from '@angular/forms';
+import { ListService } from '@services/list.service';
 
 @Component({
   selector: 'app-board',
@@ -36,11 +37,19 @@ export class BoardComponent implements OnInit {
     validators: [Validators.required],
   });
 
+  inputList = new FormControl<string>('', {
+    nonNullable: true,
+    validators: [Validators.required],
+  });
+
+  showListForm = false;
+
   constructor(
     private dialog: Dialog,
     private route: ActivatedRoute,
     private boardsService: BoardsService,
-    private cardSrv: CardService
+    private cardSrv: CardService,
+    private listSrv: ListService
   ) {}
 
   ngOnInit(): void {
@@ -77,11 +86,22 @@ export class BoardComponent implements OnInit {
     this.updateCard(card, position, listId);
   }
 
-  addColumn() {
-    // this.columns.push({
-    //   title: 'New Column',
-    //   todos: [],
-    // });
+  addList() {
+    const title = this.inputList.value;
+    if (this.board) {
+      this.listSrv
+        .create({
+          title,
+          boardId: this.board.id,
+          position: this.boardsService.getPositionNewItems(this.board.lists),
+        })
+        .subscribe((list) => {
+          console.log(list);
+          this.board?.lists.push({ ...list, cards: [] });
+          this.inputList.setValue('');
+          this.showListForm = false;
+        });
+    }
   }
 
   openDialog(card: Card) {
@@ -141,7 +161,7 @@ export class BoardComponent implements OnInit {
           title,
           listId: list.id,
           boardId: this.board.id,
-          position: this.boardsService.getPositionNewCard(list.cards),
+          position: this.boardsService.getPositionNewItems(list.cards),
         })
         .subscribe((card) => {
           console.log(card);
