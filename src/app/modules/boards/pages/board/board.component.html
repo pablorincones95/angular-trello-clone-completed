@@ -12,7 +12,9 @@
         *ngFor="let list of board?.lists"
       >
         <div class="flex justify-between py-1">
-          <h3 class="text-sm font-bold ml-2">{{ list?.title }}</h3>
+          <h3 class="text-sm font-bold ml-2">
+            {{ list?.title }}
+          </h3>
         </div>
 
         <div
@@ -28,7 +30,25 @@
             cdkDrag
             class="bg-white shadow p-2 rounded mt-2 border-b border-x-gray-300 cursor-pointer hover:bg-gray-400"
           >
-            {{ card.title }}
+            {{ card.title }} - {{ card.position }}
+          </div>
+        </div>
+        <div class="mt-5">
+          <app-btn
+            color="light"
+            *ngIf="!list.showCardForm"
+            (click)="openFormCard(list)"
+          >
+            Add Card
+          </app-btn>
+          <div *ngIf="list.showCardForm" class="w-full">
+            <textarea [formControl]="inputCard" class="w-full"></textarea>
+            <div class="flex space-x-2 justify-between">
+              <app-btn color="success" (click)="createCard(list)"
+                >Create</app-btn
+              >
+              <app-btn color="red" (click)="closeCardForm(list)">Close</app-btn>
+            </div>
           </div>
         </div>
       </div>
