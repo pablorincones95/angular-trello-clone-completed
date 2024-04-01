@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   CdkDragDrop,
   moveItemInArray,
@@ -14,6 +14,7 @@ import { CardService } from '@services/card.service';
 import { List } from '@models/list.model';
 import { FormControl, Validators } from '@angular/forms';
 import { ListService } from '@services/list.service';
+import { BACKGROUNDS } from '@models/colors.model';
 
 @Component({
   selector: 'app-board',
@@ -29,20 +30,18 @@ import { ListService } from '@services/list.service';
     `,
   ],
 })
-export class BoardComponent implements OnInit {
+export class BoardComponent implements OnInit, OnDestroy {
   board: Boards | null = null;
-
   inputCard = new FormControl<string>('', {
     nonNullable: true,
     validators: [Validators.required],
   });
-
   inputList = new FormControl<string>('', {
     nonNullable: true,
     validators: [Validators.required],
   });
-
   showListForm = false;
+  colorsBackgronds = BACKGROUNDS;
 
   constructor(
     private dialog: Dialog,
@@ -122,7 +121,7 @@ export class BoardComponent implements OnInit {
   private getBoard(id: string) {
     this.boardsService.getBoard(id).subscribe((board) => {
       this.board = board;
-      console.log(this.board);
+      this.boardsService.setBackgroundColor(this.board.backgroundColor);
     });
   }
 
@@ -174,5 +173,18 @@ export class BoardComponent implements OnInit {
 
   closeCardForm(list: List) {
     list.showCardForm = false;
+  }
+
+  get colors() {
+    if (this.board) {
+      const classes = this.colorsBackgronds[this.board.backgroundColor];
+      return classes ? classes : {};
+    }
+
+    return {};
+  }
+
+  ngOnDestroy(): void {
+    this.boardsService.setBackgroundColor('sky');
   }
 }
